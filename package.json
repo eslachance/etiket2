@@ -1,0 +1,46 @@
+{
+  "name": "etiket",
+  "version": "2.0.0",
+  "description": "Dead-Simple Tagbot with blacklist and per-server configurations.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/An-Idiots-Guide/guidebot.git"
+  },
+  "author": "Evelyne Lachance <eslachance@gmail.com> (http://evie.codes)",
+  "contributors": [
+    "York (http://anidiots.guide)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/An-Idiots-Guide/guidebot/issues"
+  },
+  "homepage": "https://github.com/An-Idiots-Guide/guidebot#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "connect-mongo": "^2.0.1",
+    "discord.js": "^11.3.1",
+    "ejs": "^2.5.7",
+    "enmap": "^0.5.0",
+    "enmap-mongo": "^1.0.3",
+    "express": "^4.16.1",
+    "express-passport": "^0.1.0",
+    "express-session": "^1.15.6",
+    "helmet": "^3.9.0",
+    "inquirer": "^3.3.0",
+    "level-session-store": "^2.1.0",
+    "marked": "^0.3.6",
+    "moment": "^2.18.1",
+    "moment-duration-format": "^1.3.0",
+    "ngrok": "^3.0.1",
+    "passport": "^0.4.0",
+    "passport-discord": "^0.1.2",
+    "snekfetch": "^3.5.2"
+  }
+}

@@ -1,0 +1,150 @@
+<%- include('../blocks/header', {bot, user, path}) %>
+<h2>Server Tags</h2>
+
+  <div class="row">
+    <div class="col col-4">
+      <%- include('../blocks/guild-card', {guild}) %>
+    </div>
+    <div class="col">
+      <div class="card" style="width: 100%;">
+        <%- include('../blocks/guild-nav', {active: "tags", guild}) %>
+      <form method="post">
+        <ul class="list-group list-group-flush">
+        <% for (const tag of tags.array()) { %>
+          <li class="list-group-item" style="padding: 0;">
+            <label class="sr-only" for="<%= tag.name %>">
+              <%= tag.name %>
+            </label>
+            <div class="input-group mb-2 mr-sm-2 mb-sm-0" style="width: 100%; margin: 0 !important;">
+              <div class="input-group-addon" style="width: 75px; text-align: right; margin: 0; padding: 10px;">
+                <%= tag.name %>
+              </div>
+              <textarea name="<%= tag.name %>" id="<%= tag.name %>" data-provide="markdown" style="width: 100%;" class="mdeditor" data-iconlibrary="fa" data-width="625"><%= tag.content %></textarea>
+            </div>
+          </li>
+          <% } %>
+        </ul>
+        <div style="width: 100%; text-align: right; margin-top: 20px;">
+          <a class="btn btn-danger" data-toggle="modal" data-target="#settingsResetModal" role="button">Reset Defaults <i class="fa fa-fw fa-cogs" aria-hidden="true"></i></a>
+          <button type="submit" class="btn btn-primary">Save Changes <i class="fa fa-fw fa-save" aria-hidden="true"></i></button>
+        </div>
+      </form>
+
+      </div>
+    </div>
+  </div>
+
+  <% include ../blocks/guild-modals %>
+  <script type="text/javascript">
+    var ts = parseInt($('#guildCreate').text());
+    $('#guildCreate').html(`<strong>Created:</strong>: ${moment(ts).format('MMMM Do YYYY (h:mm a)')}`);
+    $(".mdeditor").markdown({
+      autofocus:false,
+      savable:false,
+      footer:'<div class="well charcount"><small class="counter-wrapper text-success">2000 character left</small></div>',
+      resize: "vertical",
+      onShow: function(e){
+        const $toolbar = e.$editor.find('.btn-toolbar');
+
+        $toolbar.find('.btn-default').removeClass('btn-default').addClass('btn-secondary');
+        $toolbar.find('.hidden').removeClass('hidden').prop('hidden', true);
+        $toolbar.find('.btn-group').addClass('mr-2');
+        var content = e.parseContent(),
+          content_length = (content.match(/\n/g)||[]).length + content.length;
+        e.$editor.find('.counter-wrapper').html(2000-content_length+' character left.')
+      },
+      onChange:function(e){
+        var content = e.parseContent(),
+          content_length = (content.match(/\n/g)||[]).length + content.length;
+        
+        const counter = e.$editor.find('.counter-wrapper');
+
+        if (content_length > 2000) {
+          counter.removeClass('text-success').addClass('text-danger').html(content_length-2000+' character surplus.')
+        } else {
+          counter.removeClass('text-danger').addClass('text-success').html(2000-content_length+' character left.')
+        }
+      },
+      hiddenButtons: ['cmdHeading', 'cmdUrl', 'cmdImage', 'cmdList', 'cmdListO', 'cmdQuote'],
+      additionalButtons: [
+        [{
+          name: 'discord',
+          data: [{
+            name: 'cmdUnderline',
+            title: 'Underline',
+            hotkey: 'Ctrl+U',
+            icon: {
+              glyph: 'glyphicon glyphicon-underline',
+              fa: 'fa fa-underline',
+              'fa-3': 'icon-underline',
+              octicons: 'octicon octicon-underline'
+            },
+            callback: function(e) {
+              // Give/remove ** surround the selection
+              var chunk, cursor, selected = e.getSelection(),
+                content = e.getContent();
+
+              if (selected.length === 0) {
+                // Give extra word
+                chunk = e.__localize('underlined text');
+              } else {
+                chunk = selected.text;
+              }
+
+              // transform selection and set the cursor into chunked text
+              if (content.substr(selected.start - 2, 2) === '__' &&
+                content.substr(selected.end, 2) === '__') {
+                e.setSelection(selected.start - 2, selected.end + 2);
+                e.replaceSelection(chunk);
+                cursor = selected.start - 2;
+              } else {
+                e.replaceSelection('__' + chunk + '__');
+                cursor = selected.start + 2;
+              }
+
+              // Set the cursor
+              e.setSelection(cursor, cursor + chunk.length);
+            }
+          }, {
+            name: 'cmdStrikethrough',
+            title: 'Strikethrough',
+            hotkey: 'Ctrl+T',
+            icon: {
+              glyph: 'glyphicon glyphicon-strikethrough',
+              fa: 'fa fa-strikethrough',
+              'fa-3': 'icon-strikethrough',
+              octicons: 'octicon octicon-strikethrough'
+            },
+            callback: function(e) {
+              // Give/remove ** surround the selection
+              var chunk, cursor, selected = e.getSelection(),
+                content = e.getContent();
+
+              if (selected.length === 0) {
+                // Give extra word
+                chunk = e.__localize('strikethrough text');
+              } else {
+                chunk = selected.text;
+              }
+
+              // transform selection and set the cursor into chunked text
+              if (content.substr(selected.start - 2, 2) === '~~' &&
+                content.substr(selected.end, 2) === '~~') {
+                e.setSelection(selected.start - 2, selected.end + 2);
+                e.replaceSelection(chunk);
+                cursor = selected.start - 2;
+              } else {
+                e.replaceSelection('~~' + chunk + '~~');
+                cursor = selected.start + 2;
+              }
+
+              // Set the cursor
+              e.setSelection(cursor, cursor + chunk.length);
+            }
+          }]
+        }]
+      ]
+    })
+  </script>
+
+<% include ../blocks/footer %>
