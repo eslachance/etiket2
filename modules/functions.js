@@ -110,13 +110,12 @@ module.exports = (client) => {
     return client.loadCommand(commandName);
   };
 
-  client.getSettings = (id) => {
-    const defaults = client.config.defaultSettings;
-    let guild = client.settings.get(id);
-    if (typeof guild != "object") guild = {};
+  client.getSettings = (guild) => {
+    const defaults = client.config.defaultSettings || {};
+    const guildData = client.settings.get(guild.id) || {};
     const returnObject = {};
     Object.keys(defaults).forEach((key) => {
-      returnObject[key] = guild[key] ? guild[key] : defaults[key];
+      returnObject[key] = guildData[key] ? guildData[key] : defaults[key];
     });
     return returnObject;
   };
@@ -168,5 +167,8 @@ module.exports = (client) => {
     process.exit(1);
   });
 
-  process.on("unhandledRejection", console.dir);
+  process.on("unhandledRejection", (err) => {
+    console.error("Uncaught Promise Error: ", err);
+    process.exit(1);
+  });
 };

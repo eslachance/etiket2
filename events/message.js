@@ -3,9 +3,9 @@
 // goes `client, other, args` when this function is run.
 
 module.exports = async (client, message) => {
-  if (message.author.bot) return;
+  if (message.author.bot || message.channel.type !== "text") return;
 
-  const settings = client.getSettings(message.guild.id);
+  const settings = client.getSettings(message.guild);
   message.settings = settings;
 
   const prefix = client.getPrefix(message);
