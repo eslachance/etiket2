@@ -29,7 +29,7 @@ const helmet = require("helmet");
 const md = require("marked");
 
 // ngrok.io http tunnel, for dashboard public URL
-const ngrok = require("ngrok");
+//const ngrok = require("ngrok");
 
 module.exports = (client) => {
   // It's easier to deal with complex paths. 
@@ -119,9 +119,9 @@ module.exports = (client) => {
   };
 
   // This initializes the ngrok tunnel
-  ngrok.connect(client.config.ngrokoptions).then( url => {
-    console.log(`NGROK server running on: ${url}`);
-  });
+  //ngrok.connect(client.config.ngrokoptions).then( url => {
+  //  console.log(`NGROK server running on: ${url}`);
+  //});
 
   /** PAGE ACTIONS RELATED TO SESSIONS */
 

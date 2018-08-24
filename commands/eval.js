@@ -3,6 +3,7 @@
 // can be used to do **anything** on your machine, from stealing information to
 // purging the hard drive. DO NOT LET ANYONE ELSE USE THIS
 
+const Discord = require("discord.js");
 
 // However it's, like, super ultra useful for troubleshooting and doing stuff
 // you don't want to put in a command.

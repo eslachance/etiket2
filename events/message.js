@@ -4,11 +4,28 @@
 
 module.exports = async (client, message) => {
   if (message.author.bot || message.channel.type !== "text") return;
-
+  
+  if (message.guild.id === '260202843686830080' && message.channel.id === '481500557488422912') {
+    if (message.content.toLowerCase().includes("i understand that you did not hack my bot")) {
+      message.member.removeRole("481499302129172481");
+      message.delete();
+    } else {
+      console.log(`Message in #i-understand from ${message.author.tag} (${message.author.id}):\n${message.content}`);
+      message.delete();
+      message.reply("Go back to read <#480039595975901243> before typing anything here!").then(m=>m.delete(2000));
+    }
+  }
+  
   const settings = client.getSettings(message.guild);
   message.settings = settings;
 
   const prefix = client.getPrefix(message);
+  
+  const prefixMention = new RegExp(`^<@!?${client.user.id}>( |)$`);
+  if(message.content.match(prefixMention)) {
+    return message.reply(`my prefixes are: ${message.settings.prefixes.map(p=>`\`${p}\``).join(" ")}`);
+  }
+  
   if (!prefix) return;
 
   const args = message.content.slice(prefix.length).trim().split(/ +/g);

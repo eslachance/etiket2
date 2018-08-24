@@ -35,7 +35,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
         content,
         guild: message.guild.id,
         author: message.author.id,
-        lastmodified: new Date()
+        lastmodified: Date.now()
       });
       answer = [null, "☑"];
       break;
@@ -64,7 +64,8 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
         answer = ["Tag contents cannot be empty."];
         break;
       }
-      client.tags.set(name, content);
+      client.tags.setProp(name, "content", content);
+      client.tags.setProp(name, "lastModified", Date.now());
       answer = [null, "☑"];
       break;
     case "rename":
@@ -79,6 +80,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
       const newName = content[0];
       const oldTag = client.tags.get(name);
       client.tags.set(newName, oldTag);
+      client.tags.setProp(newName, "lastModified", Date.now());
       client.tags.delete(name);
       answer = [null, "☑"];
       break;

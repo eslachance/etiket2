@@ -11,7 +11,7 @@ const Enmap = require("enmap");
 const Provider = require("enmap-mongo");
 
 // Persistent Maps
-Object.assign(client, Enmap.multi(["settings", "tags", "blacklist", "langs"], Provider, { url: client.config.mongo }));
+Object.assign(client, Enmap.multi(["settings", "tags", "blacklist", "langs", "testing"], Provider, { url: client.config.mongo }));
 
 // Temporary maps
 client.commands = new Enmap();

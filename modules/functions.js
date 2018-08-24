@@ -169,6 +169,7 @@ module.exports = (client) => {
 
   process.on("unhandledRejection", (err) => {
     console.error("Uncaught Promise Error: ", err);
+    console.dir(err);
     process.exit(1);
   });
 };
