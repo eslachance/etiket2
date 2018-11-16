@@ -4,6 +4,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
     if (client.tags.has(`${message.guild.id}-${name}`)) {
       const tag = client.tags.get(`${message.guild.id}-${name}`);
       await message.channel.send(tag.content);
+      client.dogstats.increment("etiket.tags");
       return;
     }
   }

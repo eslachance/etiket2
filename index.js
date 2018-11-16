@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const client = new Discord.Client();
+const { StatsD } = require("hot-shots");
 
 client.config = require("./config.js");
 
@@ -13,6 +14,8 @@ Object.assign(client, Enmap.multi(["settings", "tags", "blacklist", "testing"]))
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.cooldown = new Set();
+
+client.dogstats = new StatsD("localhost", 8125);
 
 const init = async () => {
 

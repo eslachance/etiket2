@@ -1,26 +1,18 @@
 module.exports = async client => {
-  // Why await here? Because the ready event isn't actually ready, sometimes
-  // guild information will come in *after* ready. 1s is plenty, generally,
-  // for all of them to be loaded.
-  // NOTE: client.wait and client.log are added by ./modules/functions.js !
   await client.wait(1000);
 
-  // This loop ensures that client.appInfo always contains up to date data
-  // about the app's status. This includes whether the bot is public or not,
-  // its description, owner, etc. Used for the dashboard amongs other things.
-  client.appInfo = await client.fetchApplication();
-  setInterval( async () => {
+  const update = async () => {
     client.appInfo = await client.fetchApplication();
-  }, 60000);
+    client.dogstats.gauge("bot.users", client.guilds.reduce((p, c) => p + c.memberCount, 0));
+    client.dogstats.gauge("bot.guilds", client.guilds.size);
+    client.dogstats.gauge("etiket.globalTags", client.tags.size);
+  };
+  setInterval(update, 60000);
+  await update();
 
-  // Initializes the dashboard, which must be done on ready otherwise some data
-  // may be missing from the dashboard. 
   require("../modules/dashboard")(client);  
 
-  // Set the game as the default help command + guild count.
-  // NOTE: This is also set in the guildCreate and guildDelete events!
   client.user.setActivity(`${client.config.defaultSettings.prefixes[0]}help | ${client.guilds.size} Servers`);
 
-  // Log that we're ready to serve, so we know the bot accepts commands.
   client.log("log", `${client.user.tag}, ready to serve ${client.users.size} users in ${client.guilds.size} servers.`, "Ready!");
 };
