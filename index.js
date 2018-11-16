@@ -45,3 +45,22 @@ const init = async () => {
 };
 
 init();
+
+// Disable the docs command if `npm run docs` isn't ran yet
+const fs = require("fs");
+fs.exists("./modules/docs/data", res => {
+  client.docsEnabled = res;
+  if (!res) console.warn("[log] [Warn]The docs command is disabled, please run `npm i -g jsdoc` and `npm run docs` to enable the command");
+});
+
+// Needed for the messageUpdate and messageDelete support of the docs commmand
+client.docResponses = new Map();
+// Make sure client.docResponses doesn't eat more and more memory, until the bot crashes
+const cachInterval = 2*60*60*1000;
+let cache = [];
+let bool = true;
+setInterval(() => {
+  if (bool) cache = [...client.docResponses.keys()];
+  else cache.forEach(c => client.docResponses.delete(c));
+  bool = !bool;
+}, cachInterval);
