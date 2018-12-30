@@ -35,3 +35,7 @@ To add the bot to your guild, you have to get an oauth link for it.
 
 You can use this site to help you generate a full OAuth Link, which includes a calculator for the permissions:
 [https://finitereality.github.io/permissions-calculator/?v=0](https://finitereality.github.io/permissions-calculator/?v=0)
+
+## Enabling the Enamp docs command
+
+In order to enable the docs command, you need to install `jsdoc`, with the following command: `npm i -g jsdoc`. After this, run `npm run docs` in the same folder as you ran `npm install`. Within a couple of seconds this command finished, and the docs command will be automaticly enabled.

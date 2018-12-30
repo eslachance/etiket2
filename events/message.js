@@ -29,7 +29,7 @@ module.exports = async (client, message) => {
   const prefix = client.getPrefix(message);
   
   const prefixMention = new RegExp(`^<@!?${client.user.id}>( |)$`);
-  if(message.content.match(prefixMention)) {
+  if (message.content.match(prefixMention)) {
     return message.reply(`my prefixes are: ${message.settings.prefixes.map(p=>`\`${p}\``).join(" ")}`);
   }
   

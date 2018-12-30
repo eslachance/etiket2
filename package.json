@@ -4,7 +4,11 @@
   "description": "Dead-Simple Tagbot with blacklist and per-server configurations.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "docs": "npm run docs:fetch && npm run docs:jsdoc && npm run docs:parse",
+    "docs:fetch": "node ./modules/docs/updateSource.js",
+    "docs:jsdoc": "jsdoc -X ./modules/docs/data/enmap.js > ./modules/docs/data/apidocs.json",
+    "docs:parse": "node ./modules/docs/parseDocs.js"
   },
   "engines": {
     "node": ">=8"
