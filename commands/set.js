@@ -5,8 +5,7 @@ exports.run = async (client, message, [action, key, ...value], level) => { // es
   
   // Retrieve current guild settings
   const settings = message.settings;
-  console.log(settings);
-  const defaults = client.settings.get("default");
+  const defaults = client.settings.get("defaults");
   if(!client.settings.has(message.guild.id)) client.settings.set(message.guild.id, {});
 
   const copyKey = (key, prop) => {

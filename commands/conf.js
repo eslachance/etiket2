@@ -12,7 +12,7 @@ your bot. The `del` action removes the key also from every guild, and loses its 
 exports.run = async (client, message, [action, key, ...value], level) => { // eslint-disable-line no-unused-vars
 
   // Retrieve Default Values from the default settings in the bot.
-  const defaults = client.settings.get("default");
+  const defaults = client.settings.get("defaults");
   
   // Adding a new key adds it to every guild (it will be visible to all of them)
   if (action === "add") {
@@ -24,7 +24,7 @@ exports.run = async (client, message, [action, key, ...value], level) => { // es
     defaults[key] = value.join(" ");
   
     // One the settings is modified, we write it back to the collection
-    client.settings.set("default", defaults);
+    client.settings.set("defaults", defaults);
     message.reply(`${key} successfully added with the value of ${value.join(" ")}`);
   } else
   
@@ -36,7 +36,7 @@ exports.run = async (client, message, [action, key, ...value], level) => { // es
 
     defaults[key] = value.join(" ");
 
-    client.settings.set("default", defaults);
+    client.settings.set("defaults", defaults);
     message.reply(`${key} successfully edited to ${value.join(" ")}`);
   } else
   
@@ -54,11 +54,11 @@ exports.run = async (client, message, [action, key, ...value], level) => { // es
 
       // We delete the default `key` here.
       delete defaults[key];
-      client.settings.set("default", defaults);
+      client.settings.set("defaults", defaults);
       
       // then we loop on all the guilds and remove this key if it exists.
       // "if it exists" is done with the filter (if the key is present and it's not the default config!)
-      for (const [guildid, conf] of client.settings.filter((setting, id) => setting[key] && id !== "default")) {
+      for (const [guildid, conf] of client.settings.filter((setting, id) => setting[key] && id !== "defaults")) {
         delete conf[key];
         client.settings.set(guildid, conf);
       }

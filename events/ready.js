@@ -9,6 +9,8 @@ module.exports = async client => {
   };
   setInterval(update, 60000);
   await update();
+  
+  client.settings.ensure("defaults", client.config.defaultSettings);
 
   require("../modules/dashboard")(client);  
 

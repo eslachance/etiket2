@@ -9,7 +9,7 @@ client.config = require("./config.js");
 require("./modules/functions.js")(client);
 
 const Enmap = require("enmap");
-Object.assign(client, Enmap.multi(["settings", "tags", "blacklist", "testing"]));
+Object.assign(client, Enmap.multi(["settings", "tags", "blacklist", "testing"]), {fetchAll: true, cloneLevel: "deep", ensureProps: true});
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
