@@ -67,12 +67,8 @@ module.exports = (client) => {
   };
 
   client.unloadCommand = async (commandName) => {
-    let command;
-    if (client.commands.has(commandName)) {
-      command = client.commands.get(commandName);
-    } else if (client.aliases.has(commandName)) {
-      command = client.commands.get(client.aliases.get(commandName));
-    }
+    console.log(`Trying to unload ${commandName}`);
+    const command = client.commands.get(commandName) || client.aliases.get(commandName);
     if (!command) return `The command \`${commandName}\` doesn't seem to exist, nor is it an alias. Try again!`;
   
     if (command.shutdown) {
@@ -111,7 +107,7 @@ module.exports = (client) => {
   };
 
   client.getSettings = (guild) => {
-    const defaults = client.config.defaultSettings || {};
+    const defaults = client.settings.get("defaults") || {};
     const guildData = client.settings.get(guild.id) || {};
     const returnObject = {};
     Object.keys(defaults).forEach((key) => {
