@@ -14,7 +14,7 @@ require("moment-duration-format");
 // Express Plugins
 // Specifically, passport helps with oauth2 in general.
 // passport-discord is a plugin for passport that handles Discord's specific implementation.
-// express-session and level-session-store work together to create persistent sessions
+// express-session and connect-mongo work together to create persistent sessions
 // (so that when you come back to the page, it still remembers you're logged in).
 const passport = require("passport");
 const session = require("express-session");
