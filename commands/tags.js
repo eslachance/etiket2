@@ -8,12 +8,25 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
       return;
     }
   }
-
+  const tagName = args[0];
   const name = `${message.guild.id}-${args.shift()}`;
   const content = args.join(" ");
 
   let answer = [null, null];
   switch (message.flags[0]) {
+    case "search":
+      console.log(tagName);
+      let foundTags;
+      if(level > 4) {
+        foundTags = client.tags;
+      } else {
+        foundTags = client.tags.filter(tag => {
+          console.log(tagName, tag, tag.guild === message.guild.id, tag.name.includes(tagName));
+          return tag.guild === message.guild.id && tag.name.includes(tagName);
+        });
+      }
+      answer = [foundTags.size > 0 && foundTags.map(tag => `${tag.name}${level > 4 && ` in ${tag.guild}`} (by ${tag.author})`).join("\n"), foundTags.size > 0 ? null : "⁉"];
+      break;
     case "add":
       if (level < 2) {
         answer = [null, "🚫"];
@@ -23,7 +36,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
         answer = ["That tag already exists."];
         break;
       }
-      if (client.commands.has(name.split("-")[1]) || client.aliases.has(name.split("-")[1])) {
+      if (client.commands.has(tagName) || client.aliases.has(tagName)) {
         answer = ["Cannot use command name or alias as a tag name."];
         break;
       }
@@ -85,6 +98,25 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
       client.tags.delete(name);
       answer = [null, "☑"];
       break;
+    case "all":
+      if(level < 5) {
+        answer = [null, "🚫"];
+        break;
+      }
+      const listall = client.tags.keyArray();
+      answer = [`\`\`\`${listall.join("\n")}\`\`\``, null];
+      break;
+    case "cleanup":
+      if(level < 5) {
+        answer = [null, "🚫"];
+        break;
+      }
+      const previousSize = client.tags.size;
+      client.tags.forEach(tag => {
+        if(!client.guilds.has(tag.guild)) client.tags.delete(`${tag.guild}-${tag.name}`);
+      });
+      answer = [`Cleaned up ${client.tags.size - previousSize} tags.`];
+      break;
     case "list":
     default:
       const taglist = client.tags.filter(t=>t.guild===message.guild.id).map(t=>`${client.getPrefix(message)}${t.name}`).join(" ");
@@ -92,7 +124,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
       else answer = [`**\`List of Available Tags\`**\n\`\`\`${taglist}\`\`\``, null];
       break;
   }
-  if (answer[0]) message.channel.send(answer[0]);
+  if (answer[0]) message.channel.send(answer[0], {split: true});
   if (answer[1]) message.react(answer[1]);
 };
 
