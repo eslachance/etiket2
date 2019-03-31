@@ -5,7 +5,7 @@ const config = {
   // Bot Admins, level 9 by default. Array of user ID strings.
   admins: [],
 
-  // Bot Support, level 8 by default. Array of user ID strings
+  // Bot Support, level 8 by default. Array of user ID strings.
   support: [],
 
   // Your Bot's Token. Available on https://discordapp.com/developers/applications/me
@@ -16,13 +16,14 @@ const config = {
   mongo: "mongodb://username:password@example.com:55258/enmap",
 
   // This implementation uses ngrok.io's wonderful tunneling service to provide a public URL.
-  // If you host this on your own web server, remove this block, and line 121-124 of ./modules/dashboard.js
-  // which refer to ngrok. Oh and this is for a paid, static ngrok.io subdomain, otherwise it won't work.
+  // This is for a paid, static ngrok.io subdomain, otherwise it won't work.
+  // To enable, set enabled to true, enter a proper port, auth token from your ngrok admin, region, and subdomain.
   ngrokoptions: {
+    enabled: false,
     addr: 8000,
-    authtoken: "2XvZkZ9fz1eh74GmCW9AG_4f2qjNNNq7z8h1xswrRh2",
+    authtoken: "your ngrok token",
     region: "us",
-    subdomain: "etiket"
+    subdomain: "my-subdomain"
   },
 
   // Dashboard configuration. The URL must be publicly assessible. Leave /callback in the URL. 
