@@ -1,5 +1,6 @@
 const fs = require("fs");
 const justLoaded = [];
+const _ = require("lodash");
 
 module.exports = (client) => {
 
@@ -106,27 +107,18 @@ module.exports = (client) => {
   };
 
   client.getSettings = (guild) => {
-    const defaults = client.settings.get("defaults") || {};
-    const guildData = client.settings.get(guild.id) || {};
-    const returnObject = {};
-    Object.keys(defaults).forEach((key) => {
-      returnObject[key] = guildData[key] ? guildData[key] : defaults[key];
-    });
-    return returnObject;
+    if(!guild) return client.settings.get("default");
+    const guildConf = client.settings.get(guild.id) || {};
+    return ({...client.settings.get("default"), ...guildConf});
   };
-  
+
   client.writeSettings = (id, newSettings) => {
-    const defaults = client.config.defaultSettings;
-    let settings = client.settings.get(id);
-    if (typeof settings != "object") settings = {};
-    for (const key in newSettings) {
-      if (defaults[key] !== newSettings[key])  {
-        settings[key] = newSettings[key];
-      } else {
-        delete settings[key];
-      }
-    }
-    client.settings.set(id, settings);
+    const defaults = client.settings.get("default");
+    let settings = client.settings.get(id) || {};
+    client.settings.set(id, {
+      ..._.pickBy(settings, (v, k) => !_.isNil(defaults[k])),
+      ..._.pickBy(newSettings, (v, k) => !_.isNil(defaults[k]))
+    });
   };
 
   client.validateThrottle = (message, level) => {
@@ -144,7 +136,10 @@ module.exports = (client) => {
     return [true, null];
   };
 
-  client.getPrefix = (message) => message.settings.prefixes.find((prefix) => message.content.startsWith(prefix));
+  client.getPrefix = (message) => {
+    if(message.settings.prefixes.constructor.name === "String") return message.settings.prefixes;
+    return message.settings.prefixes.find((prefix) => message.content.startsWith(prefix));
+  };
 
   String.prototype.toProperCase = function() {
     return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
