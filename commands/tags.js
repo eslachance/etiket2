@@ -91,10 +91,11 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
         answer = ["Tag name not found", null];
         break;
       }
-      const newName = content[0];
+      const newName = `${message.guild.id}-${content.split(" ")[0]}`;
       const oldTag = client.tags.get(name);
       client.tags.set(newName, oldTag);
-      client.tags.setProp(newName, "lastModified", Date.now());
+      client.tags.set(newName, Date.now(), "lastModified");
+      client.tags.set(newName, content.split(" ")[0], "name");
       client.tags.delete(name);
       answer = [null, "☑"];
       break;

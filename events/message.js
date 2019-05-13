@@ -5,24 +5,7 @@
 module.exports = async (client, message) => {
   client.dogstats.increment("bot.messages");
   if (message.author.bot || message.channel.type !== "text") return;
-  
-  /*if (message.guild.id === '260202843686830080' 
-      && message.channel.id === '481500557488422912'
-      && message.member.roles.has("481499302129172481")) {
-    if (message.content.toLowerCase().includes("i understand that you did not hack my bot")) {
-      message.member.removeRole("481499302129172481");
-      message.delete();
-    } else {
-      console.log(`Message in #i-understand from ${message.author.tag} (${message.author.id}):\n${message.content}`);
-      message.delete();
-      if(message.mentions.users.size) {
-        message.member.kick();
-        message.guild.channels.get("333467846933872650").send(`${message.author.tag} ($${message.author.id}) was kicked due to a user mention.`);
-      }
-    }
-    return;
-  }*/
-  
+
   const settings = client.getSettings(message.guild);
   message.settings = settings;
 
@@ -36,7 +19,8 @@ module.exports = async (client, message) => {
   if (!prefix) return;
 
   const args = message.content.slice(prefix.length).split(/ +/);
-  const command = args.shift().toLowerCase();
+  const rawCommand = args.shift();
+  const command = rawCommand.toLowerCase();
 
   if (message.guild && !message.member) await message.guild.fetchMember(message.author);
   const level = client.permlevel(message);
@@ -54,9 +38,9 @@ module.exports = async (client, message) => {
     }
   }
 
-  if (client.tags.has(`${message.guild.id}-${command}`)) {
+  if (client.tags.has(`${message.guild.id}-${rawCommand}`)) {
     client.dogstats.increment("etiket.tags");
-    return message.channel.send(client.tags.get(`${message.guild.id}-${command}`).content);
+    return message.channel.send(client.tags.get(`${message.guild.id}-${rawCommand}`).content);
   }
 
   // Check whether the command, or alias, exist in the collections defined
