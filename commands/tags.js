@@ -1,9 +1,16 @@
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
+
+  const flags = ['search', 'add', 'delete', 'edit', 'rename', 'all', 'cleanup', 'list'];
+  if (flags.includes(args[0])) {
+    message.flags.push(args.shift());
+  }
+
   if (message.flags.length < 1) {
     const name = args[0];
     if (client.tags.has(`${message.guild.id}-${name}`)) {
       const tag = client.tags.get(`${message.guild.id}-${name}`);
-      await message.channel.send(tag.content);
+      const options = tag.attachment ? { attachment: tag.attachment } : null;
+      await message.channel.send(tag.content, options);
       client.dogstats.increment("etiket.tags");
       return;
     }
@@ -44,9 +51,11 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
         answer = ["Tag contents cannot be empty."];
         break;
       }
+      const attachment = message.attachments.size > 0 ? message.attachments.first().proxyURL : false;
       client.tags.set(name, {
         name: name.replace(`${message.guild.id}-`, ""),
         content,
+        ...(attachment ? { attachment } : {}),
         guild: message.guild.id,
         author: message.author.id,
         lastmodified: Date.now()

@@ -7,6 +7,7 @@ const randos = [
 ];
 
 module.exports = async (client, om, nm) => {
+  return; // TODO: FIX THIS SHIT
   const settings = client.getSettings(nm.guild);
   nm.settings = settings;
   const prefix = client.getPrefix(nm);

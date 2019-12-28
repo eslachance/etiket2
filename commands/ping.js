@@ -1,6 +1,8 @@
 exports.run = async (client, message, args, level) => { // eslint-disable-line no-unused-vars
-  const msg = await message.channel.send("Ping?");
-  msg.edit(`Pong! Latency is ${msg.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
+  const msg = await message.channel.send(`Last API pings: \`${client.pings.map(p => `${p}ms`).join(" , ")}\`
+Checking round-trip latency...`);
+  msg.edit(`Last API pings: \`${client.pings.map(p => `${p}ms`).join(" , ")}\`
+Pong! Bot's round-trip latency is \`${msg.createdTimestamp - message.createdTimestamp}ms\``);
 };
 
 exports.conf = {

@@ -40,7 +40,9 @@ module.exports = async (client, message) => {
 
   if (client.tags.has(`${message.guild.id}-${rawCommand}`)) {
     client.dogstats.increment("etiket.tags");
-    return message.channel.send(client.tags.get(`${message.guild.id}-${rawCommand}`).content);
+    const tag = client.tags.get(`${message.guild.id}-${rawCommand}`);
+    const options = tag.attachment ? { files: [tag.attachment] } : null;
+    return message.channel.send(tag.content, options);
   }
 
   // Check whether the command, or alias, exist in the collections defined
