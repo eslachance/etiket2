@@ -47,8 +47,8 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
         answer = ["Cannot use command name or alias as a tag name."];
         break;
       }
-      if (content.length < 1) {
-        answer = ["Tag contents cannot be empty."];
+      if (content.length < 1 && message.attachments.size === 0) {
+        answer = ["You must provide text, an attachment, or both!"];
         break;
       }
       const attachment = message.attachments.size > 0 ? message.attachments.first().proxyURL : false;
@@ -62,7 +62,7 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
       });
       answer = [null, "☑"];
       break;
-    case "del":
+    case "delete":
       if (level < 2) {
         answer = [null, "🚫"];
         break;
