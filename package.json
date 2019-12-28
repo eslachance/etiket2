@@ -38,7 +38,7 @@
     "express-session": "^1.15.6",
     "helmet": "^3.16.0",
     "hot-shots": "^6.1.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "marked": "^0.6.1",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.2.2",
