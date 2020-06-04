@@ -39,3 +39,13 @@ body {
   background-color: #747f8d;
   border-color: #9099a4;
 }
+
+.tag-badge-count {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+}
+
+.guild-icon {
+  position: relative;
+}

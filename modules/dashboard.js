@@ -140,6 +140,7 @@ module.exports = (client) => {
     } else {
       req.session.backURL = "/";
     }
+    console.log("received login request from "+req.get("X-Forwarded-For")+" : "+req.method+" "+req.originalUrl);
     next();
   },
   passport.authenticate("discord"));
@@ -148,6 +149,7 @@ module.exports = (client) => {
   // Here we check if the user was already on the page and redirect them
   // there, mostly.
   app.get("/callback", passport.authenticate("discord", { failureRedirect: "/autherror" }), (req, res) => {
+    console.log("User logged in: req.user");
     if (req.user.id === client.appInfo.owner.id) {
       req.session.isAdmin = true;
     } else {
