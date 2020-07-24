@@ -12,7 +12,6 @@ const docs = data.filter(x => !x.undocumented && x.scope !== "global" && x.kind 
   returns = `\`${returns}\``;
   if (x.returns && x.returns[0] && x.returns[0].description) returns += `  ${x.returns[0].description.replace(/\n/g, " ")}`;
   const examples = (x.examples || []).map(e => "```js\n" + e + "\n```").join("\n");
-
   return {
     name: x.name,
     kind: x.kind,
@@ -27,7 +26,7 @@ const docs = data.filter(x => !x.undocumented && x.scope !== "global" && x.kind 
 
 const embeds = docs.map(x => {
   const embed = new RichEmbed()
-    .setAuthor("Enmap Docs", "https://images-ext-1.discordapp.net/external/K8C97Vif-rsViQ7RXSCrzydUrFsxauKQ0DOhhf61xVI/%3Fgeneration%3D1529879273639085%26alt%3Dmedia/https/blobscdn.gitbook.com/v0/b/gitbook-28427.appspot.com/o/spaces%252F-LFnuGgkksxzZuqQoImA%252Favatar.png", "https://enmap.evie.codes/api")
+    .setAuthor("Enmap Docs", "https://cdn.discordapp.com/icons/298508738623438848/8ab960c4043a8bdf1f76130928147377.jpg", "https://enmap.evie.codes/api")
     .setTitle(x.title)
     .setDescription(x.desc || "No description provided")
     .setColor("BLUE");
@@ -38,30 +37,30 @@ const embeds = docs.map(x => {
   return {
     name: x.name,
     lname: x.name.toLowerCase(),
-    embed: embed._apiTransform()
+    embed: embed.toJSON()
   };
 });
 
 // Parse constructor options
-const options = data.find(e => e.kind === "class" && e.classdesc)
+const options = data.find(e => e.kind === "class" && e.classdesc && !!e.params)
   .params.filter(p => p.name.startsWith("options."));
 const optionsEmbed = new RichEmbed()
-  .setAuthor("Enmap Docs", "https://images-ext-1.discordapp.net/external/K8C97Vif-rsViQ7RXSCrzydUrFsxauKQ0DOhhf61xVI/%3Fgeneration%3D1529879273639085%26alt%3Dmedia/https/blobscdn.gitbook.com/v0/b/gitbook-28427.appspot.com/o/spaces%252F-LFnuGgkksxzZuqQoImA%252Favatar.png", "https://enmap.evie.codes/api")
+  .setAuthor("Enmap Docs", "https://cdn.discordapp.com/icons/298508738623438848/8ab960c4043a8bdf1f76130928147377.jpg", "https://enmap.evie.codes/api")
   .setTitle("Constructor Options")
   .setDescription(options.map(o => `${o.name} (${o.type.names.join(" | ")})`).join("\n"))
   .setColor("BLUE");
 
-embeds.push({ name: "options", lname: "options", embed: optionsEmbed._apiTransform() });
+embeds.push({ name: "options", lname: "options", embed: optionsEmbed.toJSON() });
 
 for (const opt of options) {
   const embed = new RichEmbed()
-    .setAuthor("Enmap Docs", "https://images-ext-1.discordapp.net/external/K8C97Vif-rsViQ7RXSCrzydUrFsxauKQ0DOhhf61xVI/%3Fgeneration%3D1529879273639085%26alt%3Dmedia/https/blobscdn.gitbook.com/v0/b/gitbook-28427.appspot.com/o/spaces%252F-LFnuGgkksxzZuqQoImA%252Favatar.png", "https://enmap.evie.codes/api")
+    .setAuthor("Enmap Docs", "https://cdn.discordapp.com/icons/298508738623438848/8ab960c4043a8bdf1f76130928147377.jpg", "https://enmap.evie.codes/api")
     .setTitle(opt.name)
     .setDescription(opt.description)
     .addField("Type", `\`${opt.type.names.join(" | ")}\``)
     .setColor("BLUE");
 
-  embeds.push({ name: opt.name, lname: opt.name.toLowerCase(), embed: embed._apiTransform() });
+  embeds.push({ name: opt.name, lname: opt.name.toLowerCase(), embed: embed.toJSON() });
 }
 
 // Parse the methods and properties inherited from the Map structure
@@ -100,7 +99,7 @@ for (const opt of options) {
   if (x.params) embed.addField("Params", x.params);
   if (x.returns) embed.addField("Returns", x.returns);
 
-  embeds.push({ name: x.name, lname: x.name.toLowerCase(), embed: embed._apiTransform() });
+  embeds.push({ name: x.name, lname: x.name.toLowerCase(), embed: embed.toJSON() });
 });
 
 // Add warnings to the embeds if they depend on enmap cache

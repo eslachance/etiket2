@@ -15,19 +15,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/An-Idiots-Guide/guidebot.git"
+    "url": "git+https://github.com/eslachance/etiket.git"
   },
   "author": "Evelyne Lachance <eslachance@gmail.com> (http://evie.codes)",
-  "contributors": [
-    "York (http://anidiots.guide)"
-  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/An-Idiots-Guide/guidebot/issues"
+    "url": "https://github.com/eslachance/etiket/issues"
   },
-  "homepage": "https://github.com/An-Idiots-Guide/guidebot#readme",
+  "homepage": "https://github.com/eslachance/etiket#readme",
   "dependencies": {
-    "better-sqlite-pool": "^0.2.2",
+    "better-sqlite3": "^7.0.1",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",
     "discord.js": "^11.4.2",
