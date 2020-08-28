@@ -4,11 +4,7 @@
   "description": "Dead-Simple Tagbot with blacklist and per-server configurations.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "docs": "npm run docs:fetch && npm run docs:jsdoc && npm run docs:parse",
-    "docs:fetch": "node ./modules/docs/updateSource.js",
-    "docs:jsdoc": "jsdoc -X ./modules/docs/data/enmap.js > ./modules/docs/data/apidocs.json",
-    "docs:parse": "node ./modules/docs/parseDocs.js"
+    "start": "node index.js"
   },
   "engines": {
     "node": ">=8"
@@ -29,20 +25,19 @@
     "connect-mongo": "^2.0.3",
     "discord.js": "^11.4.2",
     "ejs": "^2.6.1",
-    "enmap": "^5.2.3",
+    "enmap": "^5.7.1",
     "express": "^4.16.4",
     "express-passport": "^0.1.0",
     "express-session": "^1.15.6",
     "helmet": "^3.16.0",
     "hot-shots": "^6.1.1",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.20",
     "marked": "^0.6.1",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.2.2",
     "ngrok": "^3.1.1",
     "node-fetch": "^2.3.0",
     "passport": "^0.4.0",
-    "passport-discord": "^0.1.2",
-    "snekfetch": "^4.0.4"
+    "passport-discord": "^0.1.2"
   }
 }

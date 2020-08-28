@@ -42,7 +42,6 @@ const config = {
   
   "defaultSettings" : {
     "prefixes": ["~"],
-    "lang": "en", // not used yet
     "modLogChannel": "mod-log",
     "modRole": "Moderator",
     "adminRole": "Administrator",

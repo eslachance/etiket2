@@ -62,6 +62,8 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
       });
       answer = [null, "☑"];
       break;
+    case "del":
+    case "remove":
     case "delete":
       if (level < 2) {
         answer = [null, "🚫"];

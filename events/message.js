@@ -6,14 +6,12 @@ module.exports = async (client, message) => {
   client.dogstats.increment("bot.messages");
   if (message.author.bot || message.channel.type !== "text") return;
 
-  const settings = client.getSettings(message.guild);
-  message.settings = settings;
-
   const prefix = client.getPrefix(message);
   
   const prefixMention = new RegExp(`^<@!?${client.user.id}>( |)$`);
   if (message.content.match(prefixMention)) {
-    return message.reply(`my prefixes are: ${message.settings.prefixes.map(p=>`\`${p}\``).join(" ")}`);
+    const { prefixes } = client.getSettings(message.guild);
+    return message.reply(`my prefixes are: ${prefixes.map(p=>`\`${p}\``).join(" ")}`);
   }
   
   if (!prefix) return;

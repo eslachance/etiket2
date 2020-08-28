@@ -6,6 +6,8 @@
     </div>
     <div class="col">
       <%- include('../blocks/guild-nav.ejs', {active: "manage", guild}) %>
+      <p>Setting Editing has been removed until I can resolve a bug with it</p>
+      <p>Please use the +set command in your guild to change settings.</p>
       <form method="post">
         <ul class="list-group list-group-flush">
         <% const settings = bot.getSettings(guild);
@@ -19,7 +21,7 @@
               <div class="input-group-addon" style="width: 150px; text-align: right; margin: 0;">
                 <%= key %>
               </div>
-              <input type="text" class="form-control" style="text-align: left;" name="<%= key %>" id="<%= key %>" value="<%= settings[key] %>"
+              <input disabled type="text" class="form-control" style="text-align: left;" name="<%= key %>" id="<%= key %>" value="<%= settings[key] %>"
                 placeholder="Enter <%= key %>">
             </div>
           </li>
@@ -27,7 +29,7 @@
         </ul>
         <div style="width: 100%; text-align: right; margin-top: 20px;">
           <a class="btn btn-danger" data-toggle="modal" data-target="#settingsResetModal" role="button">Reset Defaults <i class="fa fa-fw fa-cogs" aria-hidden="true"></i></a>
-          <button type="submit" class="btn btn-primary">Save Changes <i class="fa fa-fw fa-save" aria-hidden="true"></i></button>
+          <button type="submit" disabled class="btn btn-primary">Save Changes <i class="fa fa-fw fa-save" aria-hidden="true"></i></button>
         </div>
       </form>
     </div>

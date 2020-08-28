@@ -1,3 +1,5 @@
+const { cloneDeep } = require("lodash");
+
 module.exports = async client => {
   await client.wait(1000);
 
@@ -10,7 +12,7 @@ module.exports = async client => {
   setInterval(update, 60000);
   await update();
   
-  client.settings.ensure("defaults", client.config.defaultSettings);
+  client.settings.ensure("defaults", cloneDeep(client.config.defaultSettings));
 
   require("../modules/dashboard")(client);  
 

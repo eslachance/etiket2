@@ -1,6 +1,6 @@
 const fs = require("fs");
 const justLoaded = [];
-const _ = require("lodash");
+const { isArray, isNil, cloneDeep, pickBy } = require("lodash");
 
 module.exports = (client) => {
 
@@ -107,17 +107,17 @@ module.exports = (client) => {
   };
 
   client.getSettings = (guild) => {
-    if(!guild) return client.settings.get("default");
-    const guildConf = client.settings.get(guild.id) || {};
-    return ({...client.settings.get("default"), ...guildConf});
+    const defaults = client.config.defaultSettings;
+    if (!guild) return defaults;
+    return client.settings.ensure(guild.id, cloneDeep(defaults));
   };
 
   client.writeSettings = (id, newSettings) => {
-    const defaults = client.settings.get("default");
+    const defaults = client.config.defaultSettings;
     let settings = client.settings.get(id) || {};
     client.settings.set(id, {
-      ..._.pickBy(settings, (v, k) => !_.isNil(defaults[k])),
-      ..._.pickBy(newSettings, (v, k) => !_.isNil(defaults[k]))
+      ...pickBy(settings, (v, k) => !isNil(defaults[k])),
+      ...pickBy(newSettings, (v, k) => !isNil(defaults[k]))
     });
   };
 
@@ -129,16 +129,20 @@ module.exports = (client) => {
       return [false, "throttled"];
     } else if (level < 2) {
       client.cooldown.add(message.author.id);
+      const { cooldown } = client.getSettings(message.guild);
       setTimeout(() => {
         client.cooldown.delete(message.author.id);
-      }, message.settings.cooldown);
+      }, cooldown);
     }
     return [true, null];
   };
 
   client.getPrefix = (message) => {
-    if(message.settings.prefixes.constructor.name === "String") return message.settings.prefixes;
-    return message.settings.prefixes.find((prefix) => message.content.startsWith(prefix));
+    const { prefixes } = client.getSettings(message.guild);
+    if(!isArray(prefixes)) {
+      return message.content.startsWith(prefixes);
+    }
+    return prefixes.find((prefix) => message.content.startsWith(prefix));
   };
 
   String.prototype.toProperCase = function() {
