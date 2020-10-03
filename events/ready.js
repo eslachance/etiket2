@@ -5,14 +5,12 @@ module.exports = async client => {
 
   const update = async () => {
     client.appInfo = await client.fetchApplication();
-    client.dogstats.gauge("bot.users", client.guilds.reduce((p, c) => p + c.memberCount, 0));
-    client.dogstats.gauge("bot.guilds", client.guilds.size);
-    client.dogstats.gauge("etiket.globalTags", client.tags.size);
   };
   setInterval(update, 60000);
   await update();
   
   client.settings.ensure("defaults", cloneDeep(client.config.defaultSettings));
+  client.dbl.postStats(client.guilds.size);
 
   require("../modules/dashboard")(client);  
 

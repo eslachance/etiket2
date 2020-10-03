@@ -3,7 +3,6 @@
 // goes `client, other, args` when this function is run.
 
 module.exports = async (client, message) => {
-  client.dogstats.increment("bot.messages");
   if (message.author.bot || message.channel.type !== "text") return;
 
   const prefix = client.getPrefix(message);
@@ -37,7 +36,6 @@ module.exports = async (client, message) => {
   }
 
   if (client.tags.has(`${message.guild.id}-${rawCommand}`)) {
-    client.dogstats.increment("etiket.tags");
     const tag = client.tags.get(`${message.guild.id}-${rawCommand}`);
     const options = tag.attachment ? { files: [tag.attachment] } : null;
     return message.channel.send(tag.content, options);
@@ -68,6 +66,5 @@ module.exports = async (client, message) => {
   }
   // If the command exists, **AND** the user has permission, run it.
   client.log("log", `${client.config.permLevels.find(l => l.level === level).name} ${message.author.username} (${message.author.id}) ran command ${cmd.help.name}`, "CMD");
-  client.dogstats.increment("bot.commands");
   cmd.run(client, message, args, level);
 };

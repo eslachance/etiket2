@@ -2,15 +2,16 @@ const Discord = require("discord.js");
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const client = new Discord.Client();
-const { StatsD } = require("hot-shots");
 const { clone, cloneDeep } = require("lodash");
+const DBL = require("dblapi.js");
+const Enmap = require("enmap");
 
 client.config = require("./config.js");
 client.config.defaultSettings = cloneDeep(client.config.defaultSettings);
+client.dbl = new DBL(client.config.dbltoken, client);
 
 require("./modules/functions.js")(client);
 
-const Enmap = require("enmap");
 Object.assign(client, Enmap.multi(["tags", "blacklist", "testing"], {fetchAll: true, cloneLevel: "deep", ensureProps: true}));
 
 client.once('ready', () => {
@@ -67,8 +68,6 @@ client.once('ready', () => {
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.cooldown = new Set();
-
-client.dogstats = new StatsD("localhost", 8125);
 
 const init = async () => {
 

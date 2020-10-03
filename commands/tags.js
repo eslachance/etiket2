@@ -22,13 +22,11 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
   let answer = [null, null];
   switch (message.flags[0]) {
     case "search":
-      console.log(tagName);
       let foundTags;
       if(level > 4) {
-        foundTags = client.tags;
+        foundTags = client.tags.filter(tag => tag.name.includes(tagName));
       } else {
         foundTags = client.tags.filter(tag => {
-          console.log(tagName, tag, tag.guild === message.guild.id, tag.name.includes(tagName));
           return tag.guild === message.guild.id && tag.name.includes(tagName);
         });
       }
@@ -131,7 +129,11 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
       break;
     case "list":
     default:
-      const taglist = client.tags.filter(t=>t.guild===message.guild.id).map(t=>`${client.getPrefix(message)}${t.name}`).join(" ");
+      const taglist = client.tags
+        .filter(t=>t.guild===message.guild.id)
+        .map(t=>`${client.getPrefix(message)}${t.name}`)
+        .sort()
+        .join(" ");
       if (taglist.length < 1) answer = ["**There are no tags on this server.**", null];
       else answer = [`**\`List of Available Tags\`**\n\`\`\`${taglist}\`\`\``, null];
       break;
