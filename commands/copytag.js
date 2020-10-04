@@ -6,7 +6,7 @@ exports.run = async (client, message, [serverid, tagname], level) => {// eslint-
   const tag = client.tags.get(tagkey);
   tag.guild = message.guild.id;
   client.tags.set(`${tag.guild}-${tag.name}`, tag);
-  msg.edit(`Successfully imported ${tagname} from ${client.guilds.get(tag.guild).name}`);
+  msg.edit(`Successfully imported ${tagname} from ${client.guilds.cache.get(tag.guild).name}`);
 };
 
 exports.conf = {

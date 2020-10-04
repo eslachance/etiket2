@@ -19,7 +19,7 @@ module.exports = async (client, message) => {
   const rawCommand = args.shift();
   const command = rawCommand.toLowerCase();
 
-  if (message.guild && !message.member) await message.guild.fetchMember(message.author);
+  if (message.guild && !message.member) await message.guild.members.fetch(message.author);
   const level = client.permlevel(message);
 
   const [valid, status] = client.validateThrottle(message, level, command);

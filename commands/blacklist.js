@@ -3,8 +3,8 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
   let answer = ["Error while processing blacklist command", null];
   switch (message.flags[0]) {
     case "add":
-      let adduser = message.mentions.users.first() || client.users.get(args[0]);
-      if (!adduser) adduser = await client.fetchUser(args[0]);
+      let adduser = message.mentions.users.first() || client.users.cache.get(args[0]);
+      if (!adduser) adduser = await client.users.fetch(args[0]);
       if (!adduser) {
         answer = ["Either you didn't mention a user, or that user wasn't valid.", null];
         break;
@@ -22,8 +22,8 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
       answer = [null, "☑"];
       break;
     case "del":
-      let deluser = message.mentions.users.first() || client.users.get(args[0]);
-      if (!deluser) deluser = await client.fetchUser(args[0]);
+      let deluser = message.mentions.users.first() || client.users.cache.get(args[0]);
+      if (!deluser) deluser = await client.users.fetch(args[0]);
       if (!deluser) {
         answer = ["Either you didn't mention a user, or that user wasn't valid.", null];
         break;

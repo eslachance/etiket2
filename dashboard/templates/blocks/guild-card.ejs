@@ -36,19 +36,19 @@
                     <%= `${guild.memberCount}` %>
                       (
                       <i class="fa fa-fw fa-android" aria-hidden="true"></i>
-                      <%= `${guild.members.filter(m => m.user.bot).size}` %> Bots )
+                      <%= `${guild.members.cache.filter(m => m.user.bot).size}` %> Bots )
                   </li>
                   <li class="list-group-item">
                     <strong>Roles</strong> :
                     <i class="fa fa-fw fa-users" aria-hidden="true"></i>
-                    <%= guild.roles.size %>
+                    <%= guild.roles.cache.size %>
                   </li>
                   <li class="list-group-item">
                     <strong>Channels</strong> :
                     <i class="fa fa-fw fa-hashtag" aria-hidden="true"></i>
-                    <%= `${guild.channels.filter(c => c.type === 'text').size}`%>
+                    <%= `${guild.channels.cache.filter(c => c.type === 'text').size}`%>
                       <i class="fa fa-fw fa-microphone" aria-hidden="true"></i>
-                      <%= `${guild.channels.filter(c => c.type === 'voice').size}`%>
+                      <%= `${guild.channels.cache.filter(c => c.type === 'voice').size}`%>
                   </li>
                 </ul>
                 <a class="btn btn-danger" data-toggle="modal" data-target="#serverLeaveModal" role="button">Leave
