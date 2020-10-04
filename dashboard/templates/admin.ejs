@@ -2,7 +2,7 @@
   <div class="container">
     <h1 class="display-3">Administration</h1>
     <ul class="list-unstyled">
-      <% bot.guilds.forEach(guild => { %>
+      <% bot.guilds.cache.forEach(guild => { %>
       <li class="media" style="padding: 10px;">
         <span class="guild-icon">
       <% if (guild.icon) { %>
@@ -37,4 +37,4 @@
       <% }); %>
     </ul>
 
-<% include ./blocks/footer %>
+    <% include('blocks/footer') %>

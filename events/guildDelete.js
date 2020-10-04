@@ -2,9 +2,11 @@
 
 module.exports = (client, guild) => {
   if(!guild.available) return;
-  client.user.setActivity(`${client.config.defaultSettings.prefixes[0]}help | ${client.guilds.size} Servers`);
+  client.user.setActivity(`${client.config.defaultSettings.prefixes[0]}help | ${client.guilds.cache.size} Servers`);
 
   // Well they're gone. Let's remove them from the settings!
   client.settings.delete(guild.id);
-  client.dbl.postStats(client.guilds.size);
+  if(client.dbl) {
+    client.dbl.postStats(client.guilds.cache.size);
+  }
 };

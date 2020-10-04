@@ -28,7 +28,7 @@
         <% 
         let href, text;
         let enabled;
-        if(bot.guilds.get(guild.id)) {
+        if(bot.guilds.cache.get(guild.id)) {
           href = `/dashboard/${guild.id}/manage`;
           text = "Manage";
           enabled = true;
@@ -44,4 +44,4 @@
   <% }); %>
   </ul>
 
-  <% include ./blocks/footer %>
+  <% include('blocks/footer') %>

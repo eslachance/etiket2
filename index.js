@@ -8,7 +8,10 @@ const Enmap = require("enmap");
 
 client.config = require("./config.js");
 client.config.defaultSettings = cloneDeep(client.config.defaultSettings);
-client.dbl = new DBL(client.config.dbltoken, client);
+
+if(client.config.dbltoken) {
+  client.dbl = new DBL(client.config.dbltoken, client);
+}
 
 require("./modules/functions.js")(client);
 
@@ -20,15 +23,15 @@ client.once('ready', () => {
     fetchAll: true,
     ensureProps: true,
     cloneLevel: 'none',
-    // autoEnsure: {
-    //   "cooldown": 2500,
-    //   "prefixes": ["+"],
-    //   "modLogChannel": "mod-log",
-    //   "modRoles": ["Moderator"],
-    //   "adminRoles": ["Administrator"]
-    // },
+    autoEnsure: {
+      "cooldown": 2500,
+      "prefixes": ["+"],
+      "modLogChannel": "mod-log",
+      "modRoles": ["Moderator"],
+      "adminRoles": ["Administrator"]
+    },
     serializer: (data, key) => {
-      if(!client.guilds.get(key)) return data;
+      if(!client.guilds.cache.get(key)) return data;
       let converted;
       try {
         
@@ -40,24 +43,22 @@ client.once('ready', () => {
         };
       } catch (e) {
         console.log(`ERROR Converting ${key}`, e);
-        console.log(data.adminRoles);
         converted = data;
       }
       return converted;
     },
     deserializer: (data, key) => {
-      if(!client.guilds.get(key)) return data;
+      if(!client.guilds.cache.get(key)) return data;
       let converted;
       try {
         converted = {
         ...data,
-        modLogChannel: data.modLogChannel ? client.guilds.get(key).channels.get(data.modLogChannel) : null,
-        adminRoles: data.adminRoles.map(roleId => client.guilds.get(key).roles.get(roleId)),
-        modRoles: data.modRoles.map(roleId => client.guilds.get(key).roles.get(roleId)),
+        modLogChannel: data.modLogChannel ? client.guilds.cache.get(key).channels.cache.get(data.modLogChannel) : null,
+        adminRoles: data.adminRoles.map(roleId => client.guilds.cache.get(key).roles.cache.get(roleId)),
+        modRoles: data.modRoles.map(roleId => client.guilds.cache.get(key).roles.cache.get(roleId)),
       };
       } catch(e) {
         console.log(`ERROR Converting ${key}`, e);
-        console.log(data.adminRoles);
         converted = data;
       }
       return converted;

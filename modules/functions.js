@@ -68,7 +68,6 @@ module.exports = (client) => {
   };
 
   client.unloadCommand = async (commandName) => {
-    console.log(`Trying to unload ${commandName}`);
     const command = client.commands.get(commandName);
     if (!command) return `The command \`${commandName}\` doesn't seem to exist, nor is it an alias. Try again!`;
     if (command.shutdown) {
@@ -109,7 +108,7 @@ module.exports = (client) => {
   client.getSettings = (guild) => {
     const defaults = client.config.defaultSettings;
     if (!guild) return defaults;
-    return client.settings.ensure(guild.id, cloneDeep(defaults));
+    return client.settings.get(guild.id);
   };
 
   client.writeSettings = (id, newSettings) => {

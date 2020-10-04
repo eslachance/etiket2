@@ -9,12 +9,13 @@ module.exports = async client => {
   setInterval(update, 60000);
   await update();
   
-  client.settings.ensure("defaults", cloneDeep(client.config.defaultSettings));
-  client.dbl.postStats(client.guilds.size);
+  if(client.dbl) {
+    client.dbl.postStats(client.guilds.cache.size);
+  }
 
   require("../modules/dashboard")(client);  
 
-  client.user.setActivity(`${client.config.defaultSettings.prefixes[0]}help | ${client.guilds.size} Servers`);
+  client.user.setActivity(`${client.config.defaultSettings.prefixes[0]}help | ${client.guilds.cache.size} Servers`);
 
-  client.log("log", `${client.user.tag}, ready to serve ${client.users.size} users in ${client.guilds.size} servers.`, "Ready!");
+  client.log("log", `${client.user.tag}, ready to serve ${client.users.cache.size} users in ${client.guilds.cache.size} servers.`, "Ready!");
 };

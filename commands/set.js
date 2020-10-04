@@ -8,8 +8,7 @@ const keyTypes = {
       if(message.mentions.channels.size === 1) return message.mentions.channels.first();
       if(!data) return null;
       if(typeof data === 'string') {
-        console.log("String found, getting channel...");
-        return message.guild.channels.get(data) || message.guild.channels.find(c => c.name === data);
+        return message.guild.channels.cache.get(data) || message.guild.channels.find(c => c.name === data);
       }
       return null;
     },
@@ -21,7 +20,7 @@ const keyTypes = {
       if(message.mentions.roles.size === 1) return message.mentions.roles.first();
       if(!data) return null;
       if(typeof data === 'string') {
-        return message.guild.roles.get(data) || message.guild.roles.find(c => c.name === data);
+        return message.guild.roles.cache.get(data) || message.guild.roles.find(c => c.name === data);
       }
       return null;
     },
@@ -36,7 +35,7 @@ const keyTypes = {
       if(message.mentions.roles.size === 1) return message.mentions.roles.first();
       if(!data) return null;
       if(typeof data === 'string') {
-        return message.guild.roles.get(data) || message.guild.roles.find(c => c.name === data);
+        return message.guild.roles.cache.get(data) || message.guild.roles.find(c => c.name === data);
       }
       return null;
     },
@@ -65,9 +64,6 @@ exports.run = async (client, message, [action, key, ...value], level) => { // es
   value = value.length > 1 ? value.join(" ") : value[0];
   // Retrieve current guild settings
   const settings = client.settings.get(message.guild.id);
-  
-  console.log(action, key, value);
-  console.log("Current Settings: ", settings);
 
   // Secondly, if a user does `-set edit <key> <new value>`, let's change it
   if (action === "edit") {
@@ -98,7 +94,6 @@ exports.run = async (client, message, [action, key, ...value], level) => { // es
     }
     
     try {
-      client.settings.ensure(message.guild.id, [], key);
       client.settings.push(message.guild.id, value, key);
     } catch(e) {
       return message.reply("Error occured while pushing to array: " + e);
@@ -121,7 +116,6 @@ exports.run = async (client, message, [action, key, ...value], level) => { // es
     }
 
     try {
-      console.log(`Attempting to remove ${value} from ${key}`);
       client.settings.remove(message.guild.id, value, key);
     } catch(e) {
       return message.reply("Error occured while removing from array: " + e);
