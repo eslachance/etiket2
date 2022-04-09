@@ -32,7 +32,7 @@
     "helmet": "^3.16.0",
     "lodash": "^4.17.20",
     "marked": "^1.2.0",
-    "moment": "^2.29.0",
+    "moment": "^2.29.2",
     "moment-duration-format": "^2.3.2",
     "nedb-session-store": "^1.1.2",
     "ngrok": "^3.3.0",
