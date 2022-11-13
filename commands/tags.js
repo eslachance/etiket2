@@ -11,7 +11,6 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
       const tag = client.tags.get(`${message.guild.id}-${name}`);
       const options = tag.attachment ? { attachment: tag.attachment } : null;
       await message.channel.send(tag.content, options);
-      client.dogstats.increment("etiket.tags");
       return;
     }
   }
@@ -126,6 +125,14 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
         if(!client.guilds.has(tag.guild)) client.tags.delete(`${tag.guild}-${tag.name}`);
       });
       answer = [`Cleaned up ${client.tags.size - previousSize} tags.`];
+      break;
+    case "source":
+      if (!client.tags.has(name)) {
+        answer = ["Tag name not found", null];
+        break;
+      }
+      const source = client.tags.get(name, "content");
+      answer = [`\`Source for ${name}:\`\n\`\`\`${source.replace(/`/g, "\\`")}\`\`\``, null];
       break;
     case "list":
     default:

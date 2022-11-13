@@ -17,5 +17,5 @@ module.exports = async client => {
 
   client.user.setActivity(`${client.config.defaultSettings.prefixes[0]}help | ${client.guilds.cache.size} Servers`);
 
-  client.log("log", `${client.user.tag}, ready to serve ${client.users.cache.size} users in ${client.guilds.cache.size} servers.`, "Ready!");
+  client.log("log", `${client.user.tag}, ready to serve ${client.getAllMembers()} users in ${client.guilds.cache.size} servers.`, "Ready!");
 };

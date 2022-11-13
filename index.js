@@ -13,6 +13,10 @@ if(client.config.dbltoken) {
   client.dbl = new DBL(client.config.dbltoken, client);
 }
 
+client.dbl.on('error', e => {
+  console.log(`DBL Error: ${e}`);
+});
+
 require("./modules/functions.js")(client);
 
 Object.assign(client, Enmap.multi(["tags", "blacklist", "testing"], {fetchAll: true, cloneLevel: "deep", ensureProps: true}));
@@ -73,7 +77,7 @@ client.cooldown = new Set();
 const init = async () => {
 
   const cmdFiles = await readdir("./commands/");
-  client.log("log", `Loading a ${cmdFiles.length} commands.`);
+  client.log("log", `Loading ${cmdFiles.length} commands.`);
   cmdFiles.forEach(f => {
     if (!f.endsWith(".js")) return;
     const response = client.loadCommand(f);
@@ -81,7 +85,7 @@ const init = async () => {
   });
 
   const evtFiles = await readdir("./events/");
-  client.log("log", `Loading a ${evtFiles.length} events.`);
+  client.log("log", `Loading ${evtFiles.length} events.`);
   evtFiles.forEach(file => {
     const eventName = file.split(".")[0];
     const event = require(`./events/${file}`);

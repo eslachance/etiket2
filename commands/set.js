@@ -27,7 +27,7 @@ const keyTypes = {
     checkDupe: (arr, data) => {
       return arr.find(el => el.id === data.id);
     },
-    display: (data) => data.map(d => `@${d.name}`).join(', '),
+    display: (data) => data.map(d => d ? `@${d.name}` : '').join(', '),
   },
   'adminRoles': {
     type: 'Role',
@@ -42,7 +42,7 @@ const keyTypes = {
     checkDupe: (arr, data) => {
       return arr.find(el => el.id === data.id);
     },
-    display: (data) => data.map(d => `@${d.name}`).join(', '),
+    display: (data) => data.map(d => d ? `@${d.name}` : '').join(', '),
   },
   'prefixes': {
     type: "String",
@@ -62,10 +62,8 @@ const keyTypes = {
 exports.run = async (client, message, [action, key, ...value], level) => { // eslint-disable-line no-unused-vars
   
   value = value.length > 1 ? value.join(" ") : value[0];
-  // Retrieve current guild settings
   const settings = client.settings.get(message.guild.id);
 
-  // Secondly, if a user does `-set edit <key> <new value>`, let's change it
   if (action === "edit") {
     if (!key) return message.reply("Please specify a key to edit");
     if (!settings.hasOwnProperty(key)) return message.reply("This key does not exist in the settings");

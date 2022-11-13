@@ -143,16 +143,18 @@ module.exports = (client) => {
     }
     return prefixes.find((prefix) => message.content.startsWith(prefix));
   };
-
-  String.prototype.toProperCase = function() {
+  
+  ''.constructor.prototype.toProperCase = function() {
     return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-  };    
+  };
 
-  Array.prototype.random = function() {
+  [].constructor.prototype.random = function() {
     return this[Math.floor(Math.random() * this.length)];
   };
 
   client.wait = require("util").promisify(setTimeout);
+  
+  client.getAllMembers = () => client.guilds.cache.reduce((x, y) => x + y.memberCount, 0);
 
   process.on("uncaughtException", (err) => {
     const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");

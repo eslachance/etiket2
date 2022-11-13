@@ -15,6 +15,13 @@ module.exports = async (client, message) => {
   
   if (!prefix) return;
 
+  if(message.guild && !message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES", false)) {
+    message.author.send("I do not have permissions to send messages in the channel you just sent a command on. Please fix permissions or ask a guild admin to do so.").catch(() => {
+      if(!message.guild) return;
+      console.log(`Could not send message to guild ${message.guild.name}, or DM the user ${message.author.tag} (${message.author.id}).`);
+    });
+  }
+
   const args = message.content.slice(prefix.length).split(/ +/);
   const rawCommand = args.shift();
   const command = rawCommand.toLowerCase();

@@ -11,6 +11,7 @@ const app = express();
 const moment = require("moment");
 require("moment-duration-format");
 
+
 // Express Plugins
 // Specifically, passport helps with oauth2 in general.
 // passport-discord is a plugin for passport that handles Discord's specific implementation.
@@ -24,6 +25,7 @@ const Strategy = require("passport-discord").Strategy;
 // Helmet is specifically a security plugin that enables some specific, useful 
 // headers in your page to enhance security.
 const helmet = require("helmet");
+const cors = require("cors");
 
 // Used to parse Markdown from things like ExtendedHelp
 const md = require("marked");
@@ -85,8 +87,18 @@ module.exports = (client) => {
   // Initializes passport and session.
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(helmet());
-
+  // app.use(helmet({
+  //   crossOriginResourcePolicy: false,
+  // }));
+  
+  app.use(cors({
+    origin: '*',
+    methods: [],
+    allowedHeaders: [],
+    exposedHeaders: [],
+    credentials: true
+}));
+  
   // The domain name used in various endpoints to link between pages.
   app.locals.domain = client.config.dashboard.domain;
   
@@ -244,9 +256,11 @@ module.exports = (client) => {
 
   // Settings page to change the guild configuration. Definitely more fancy than using
   // the `set` command!
-  app.get("/dashboard/:guildID/manage", checkAuth, (req, res) => {
+  app.get("/dashboard/:guildID/manage", checkAuth, async (req, res) => {
     const guild = client.guilds.cache.get(req.params.guildID);
     if (!guild) return res.status(404);
+    await guild.members.fetch(req.user.id).catch(() => {});
+    await guild.members.fetch(guild.ownerID).catch(() => {});
     const isManaged = guild && !!guild.member(req.user.id) ? guild.member(req.user.id).permissions.has("MANAGE_GUILD") : false;
     if (!isManaged && !req.session.isAdmin) res.redirect("/");
     renderTemplate(res, req, "guild/manage.ejs", {guild});
@@ -300,6 +314,13 @@ module.exports = (client) => {
     if (!isManaged && !req.session.isAdmin) res.redirect("/");
     client.settings.delete(guild.id);
     res.redirect("/dashboard/"+req.params.guildID);
+  });
+
+  // app.options('/userdata/:id', cors({credentials: true, origin: '*'}));
+  app.get("/userdata/:id", /* cors({credentials: true, origin: '*'}), */ async (req, res) => {
+    const userdata = await client.users.fetch(req.params.id);
+    if(!userdata) return res.status(404);
+    res.json(userdata);
   });
   
   client.site = app.listen(client.config.dashboard.port);

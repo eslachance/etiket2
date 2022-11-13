@@ -4,6 +4,7 @@
 // purging the hard drive. DO NOT LET ANYONE ELSE USE THIS
 
 const Discord = require("discord.js");
+const fetch = require("node-fetch");
 
 // However it's, like, super ultra useful for troubleshooting and doing stuff
 // you don't want to put in a command.
@@ -13,9 +14,40 @@ exports.run = async (client, message, args, level) => { // eslint-disable-line n
     const evaled = eval(code);
     const clean = await client.clean(client, evaled);
     if (message.flags[0] && message.flags[0] == "s") return;
-    message.channel.send(`\`\`\`js\n${clean}\n\`\`\``);
+    if(clean.length > 1900) {
+      const res = await fetch("https://text.evie.codes/documents", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'plain'
+        },
+        body: clean,
+      }).then(r => r.json());
+      if (res?.key) {
+        message.channel.send(`\`Message too long, click for result:\`\n<https://text.evie.codes/${res.key}>`);
+      } else {
+        await message.channel.send(`Message too long, here's an exerpt:\n\`\`\`${clean.slice(0, 1500)}\`\`\``);
+      }
+    } else {
+      message.channel.send(`\`\`\`js\n${clean}\n\`\`\``);  
+    }
   } catch (err) {
-    message.channel.send(`\`ERROR\` \`\`\`xl\n${await client.clean(client, err)}\n\`\`\``);
+    const cleanErr = await client.clean(client, err);
+    if(cleanErr.length > 1900) {
+      const res = await fetch("https://text.evie.codes/documents", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'plain'
+        },
+        body: cleanErr,
+      }).then(r => r.json());
+      if (res?.key) {
+        message.channel.send(`\`Message too long, click for result:\`\n<https://text.evie.codes/${res.key}>`);
+      } else {
+        message.channel.send('Message too long and could not upload to hastebin.');
+      }
+    } else {
+      message.channel.send(`\`\`\`js\n${cleanErr}\n\`\`\``);
+    }
   }
 };
 
