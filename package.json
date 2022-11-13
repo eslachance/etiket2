@@ -31,7 +31,7 @@
     "express-passport": "^0.1.0",
     "express-session": "^1.17.1",
     "helmet": "^3.16.0",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "marked": "^1.2.0",
     "moment": "^2.29.0",
     "moment-duration-format": "^2.3.2",
